@@ -5,7 +5,7 @@ The homepage of mcrops with user documentation is located on:
 
 https://mcrops.readthedocs.io
 
-![Sample output from mcrops](images/sample_output.jpg?raw=true "Sample output")
+.. image:: ./docs/_static/sample_output.jpg
 
 Getting started
 ==========
