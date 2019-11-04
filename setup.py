@@ -13,7 +13,7 @@ from setuptools import find_packages, setup, Command, Extension
 # Package meta-data.
 NAME = 'mcrops'
 DESCRIPTION = 'A small library for processing images of agricultural fields.'
-URL = 'https://bitbucket.org/raikel/mcrops'
+URL = 'https://github.com/raikel/mcrops'
 EMAIL = 'raikelbl@gmail.com'
 AUTHOR = 'Raikel Bordon'
 REQUIRES_PYTHON = '>=3.7.0'
@@ -112,6 +112,7 @@ setup(
         # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',

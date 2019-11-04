@@ -1,6 +1,6 @@
 import math
 
-import mcrops
+from mcrops import veget, rows, utils
 from os import path
 import argparse
 import sys
@@ -16,6 +16,7 @@ def full_imshow(name, image):
 def main(image_path: str, resolution: float, row_sep: float):
     print(f'Starting analysis.')
     print(f'Loading image {image_path}')
+    # Load a crop field image
     image = cv.imread(image_path)
 
     if image is None:
@@ -26,12 +27,15 @@ def main(image_path: str, resolution: float, row_sep: float):
     print(f'Image loaded. Size is {w}x{h} pixels.')
 
     print('Segmenting vegetation.')
-    veg_mask = mcrops.segment_vegetation(image)
+    # Segment vegetation
+    veg_mask = veget.segment_vegetation(image)
 
     print('Detecting crop area')
-    roi_poly = mcrops.detect_roi(
+    # Detect the crop field ROI area
+    roi_poly = veget.detect_roi(
         veg_mask, row_sep=row_sep, resolution=resolution
     )
+    # Draw the contours of the ROI area
     cv.drawContours(
         image=image_draw,
         contours=[roi_poly],
@@ -42,7 +46,8 @@ def main(image_path: str, resolution: float, row_sep: float):
     )
 
     print('Detecting rows direction')
-    direction = mcrops.detect_direction(
+    # Detect the mean crop rows direction
+    direction = rows.detect_direction(
         veg_mask=veg_mask,
         window_shape=(20, 30),
         resolution=resolution
@@ -57,22 +62,24 @@ def main(image_path: str, resolution: float, row_sep: float):
     print(f'Mean row direction is f{math.degrees(direction):.2f} degrees')
 
     print('Normalizing image')
-    image_rows, roi_poly_norm, _ = mcrops.norm_image(
+    # Normalize the crop field image and the vegetation mask (trim then to ROI
+    # area and rotate them such that crop rows are horizontal)
+    image_rows, roi_poly_norm, _ = veget.norm_image(
         image=image,
         roi_poly=roi_poly,
         rows_direction=direction
     )
-    veg_mask, roi_poly_norm, _ = mcrops.norm_image(
+    veg_mask, roi_poly_norm, _ = veget.norm_image(
         image=veg_mask,
         roi_poly=roi_poly,
         rows_direction=direction,
         is_mask=True
     )
 
-    roi_mask = mcrops.poly_mask(roi_poly_norm, veg_mask.shape[:2])
+    roi_mask = utils.poly_mask(roi_poly_norm, veg_mask.shape[:2])
 
     print('Computing vegetation density map')
-    density_map = mcrops.mask_density(
+    density_map = veget.mask_density(
         veg_mask,
         roi_mask,
         resolution=resolution,
@@ -82,17 +89,17 @@ def main(image_path: str, resolution: float, row_sep: float):
     d_max = density_map.max()
     print(f'Vegetation density is range [{d_min:.3f}, {d_max:.3f}]')
 
-    density_image = mcrops.array_image(density_map, colormap=cv.COLORMAP_JET)
+    density_image = utils.array_image(density_map, colormap=cv.COLORMAP_JET)
 
     print('Detecting rows')
-    row_ridges, row_furrows = mcrops.detect_rows(
+    row_ridges, row_furrows = rows.detect_rows(
         veg_mask,
         roi_mask,
         resolution=resolution,
         row_sep=row_sep,
         fusion_thr=0.4
     )
-    image_rows = mcrops.draw_rows(image_rows, row_ridges)
+    image_rows = utils.draw_rows(image_rows, row_ridges)
 
     full_imshow('Crop field image', image_draw)
     full_imshow('Vegetation mask', veg_mask)

@@ -1,4 +1,4 @@
-import mcrops
+from mcrops import veget, utils
 from os import path
 import argparse
 import sys
@@ -14,6 +14,7 @@ def full_imshow(name, image):
 def main(image_path, resolution=20):
     print(f'Starting analysis.\n')
     print(f'Loading image {image_path}')
+    # Load a crop field image
     image = cv.imread(image_path)
 
     if image is None:
@@ -24,12 +25,15 @@ def main(image_path, resolution=20):
     print(f'Image loaded. Size is {w}x{h} pixels.')
 
     print('Segmenting vegetation')
-    veg_mask = mcrops.segment_vegetation(image)
+    # Segment vegetation
+    veg_mask = veget.segment_vegetation(image)
 
     print('Detecting crop area')
-    roi_poly = mcrops.detect_roi(
+    # Detect the crop field ROI area
+    roi_poly = veget.detect_roi(
         veg_mask, row_sep=0.7, resolution=resolution
     )
+    # Draw the contours of the ROI area
     cv.drawContours(
         image=image_draw,
         contours=[roi_poly],
@@ -38,12 +42,13 @@ def main(image_path, resolution=20):
         thickness=8,
         lineType=cv.LINE_AA
     )
-
-    roi_mask = mcrops.poly_mask(roi_poly, veg_mask.shape[:2])
+    # Build a mask image from the ROI polyline
+    roi_mask = utils.poly_mask(roi_poly, veg_mask.shape[:2])
     veg_mask[roi_mask == 0] = 0
 
     print('Computing vegetation density map')
-    density_map = mcrops.mask_density(
+    # Create a vegetation density map from the vegetation mask
+    density_map = veget.mask_density(
         veg_mask,
         roi_mask,
         resolution=resolution,
@@ -53,7 +58,8 @@ def main(image_path, resolution=20):
     d_max = density_map.max()
     print(f'Vegetation density is range [{d_min:.3f}, {d_max:.3f}]')
 
-    image_map = mcrops.array_image(density_map, colormap=cv.COLORMAP_JET)
+    # Convert the vegetation density map to a color image
+    image_map = utils.array_image(density_map, colormap=cv.COLORMAP_JET)
 
     full_imshow('Crop field image', image_draw)
     full_imshow('Vegetation mask', veg_mask)
