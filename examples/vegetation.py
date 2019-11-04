@@ -13,7 +13,7 @@ def full_imshow(name, image):
     cv.imshow(name, image)
 
 
-def main(image_path, resolution=20):
+def main(image_path: str, resolution: float, row_sep: float):
     print(f'Starting analysis.\n')
     print(f'Loading image {image_path}')
     # Load a crop field image
@@ -33,7 +33,7 @@ def main(image_path, resolution=20):
     print('Detecting crop area')
     # Detect the crop field ROI area
     roi_poly = veget.detect_roi(
-        veg_mask, row_sep=0.7, resolution=resolution
+        veg_mask, row_sep=row_sep, resolution=resolution
     )
     # Draw the contours of the ROI area
     cv.drawContours(
@@ -82,9 +82,23 @@ if __name__ == '__main__':
         '--input',
         type=str,
         required=False,
-        default=path.join(curr_dir, 'data/crop_field_dense_res20.png'),
+        default=path.join(curr_dir, 'data/crop_field_sparse_res40.png'),
         help='Path to crop field image.'
+    )
+    parser.add_argument(
+        '--res',
+        type=float,
+        required=False,
+        default=40,
+        help='Image resolution in pixels/meter.'
+    )
+    parser.add_argument(
+        '--row_sep',
+        type=float,
+        required=False,
+        default=0.7,
+        help='Approximated mean crop rows separation in meters.'
     )
     args = parser.parse_args(sys.argv[1:])
 
-    main(image_path=args.input)
+    main(image_path=args.input, resolution=args.res, row_sep=args.row_sep)

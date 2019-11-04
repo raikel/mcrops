@@ -41,7 +41,7 @@ def draw_rows(
         for n in range(rows.shape[1] - 1):
             p1 = (rows[k, n, 1], rows[k, n, 0])
             p2 = (rows[k, n + 1, 1], rows[k, n + 1, 0])
-            cv.line(image, p1, p2, line_color, line_width)
+            cv.line(image, p1, p2, line_color, line_width, lineType=cv.LINE_AA)
 
     return image
 

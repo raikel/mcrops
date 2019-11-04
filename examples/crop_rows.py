@@ -106,7 +106,12 @@ def main(image_path: str, resolution: float, row_sep: float):
         fusion_thr=0.4
     )
     # Draw the crop rows lines
-    image_rows = utils.draw_rows(image_rows, row_ridges)
+    image_rows = utils.draw_rows(
+        image_rows,
+        row_ridges,
+        line_width=8,
+        line_color=(0, 255, 0)
+    )
 
     full_imshow('Crop field image', image_draw)
     full_imshow('Vegetation mask', veg_mask)
