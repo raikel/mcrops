@@ -28,7 +28,7 @@ Example usages
 Here is some example usages of mcrops.
 
 Vegetation analysis
----
+-------------------
 
 .. code-block:: python
 
