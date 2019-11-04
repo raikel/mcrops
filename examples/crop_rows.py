@@ -1,10 +1,11 @@
+import argparse
 import math
+import sys
+from os import path
+
+import cv2 as cv
 
 from mcrops import veget, rows, utils
-from os import path
-import argparse
-import sys
-import cv2 as cv
 
 
 def full_imshow(name, image):
@@ -52,6 +53,8 @@ def main(image_path: str, resolution: float, row_sep: float):
         window_shape=(20, 30),
         resolution=resolution
     )
+
+    # Draw an arrow indicating the direction of the crop rows
     pt1 = (int(w/2), int(h/2))
     length = resolution * 20
     pt2 = (
@@ -75,10 +78,11 @@ def main(image_path: str, resolution: float, row_sep: float):
         rows_direction=direction,
         is_mask=True
     )
-
+    # Build a mask image from the ROI polyline
     roi_mask = utils.poly_mask(roi_poly_norm, veg_mask.shape[:2])
 
     print('Computing vegetation density map')
+    # Create a row-oriented vegetation density map from the vegetation mask
     density_map = veget.mask_density(
         veg_mask,
         roi_mask,
@@ -89,9 +93,11 @@ def main(image_path: str, resolution: float, row_sep: float):
     d_max = density_map.max()
     print(f'Vegetation density is range [{d_min:.3f}, {d_max:.3f}]')
 
+    # Convert the row-oriented vegetation density map to a color image
     density_image = utils.array_image(density_map, colormap=cv.COLORMAP_JET)
 
     print('Detecting rows')
+    # Detect the crop rows (ridges and furrows)
     row_ridges, row_furrows = rows.detect_rows(
         veg_mask,
         roi_mask,
@@ -99,6 +105,7 @@ def main(image_path: str, resolution: float, row_sep: float):
         row_sep=row_sep,
         fusion_thr=0.4
     )
+    # Draw the crop rows lines
     image_rows = utils.draw_rows(image_rows, row_ridges)
 
     full_imshow('Crop field image', image_draw)

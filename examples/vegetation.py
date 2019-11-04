@@ -1,8 +1,10 @@
-from mcrops import veget, utils
-from os import path
 import argparse
 import sys
+from os import path
+
 import cv2 as cv
+
+from mcrops import veget, utils
 
 
 def full_imshow(name, image):
