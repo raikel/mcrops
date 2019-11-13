@@ -15,7 +15,7 @@ def segment_weeds(
     veg_mask: np.ndarray,
     crop_rows: np.ndarray,
     model: DecisionTreeClassifier = None
-):
+) -> np.ndarray:
     """Segment weed pixels of a crop field image.
 
     Parameters
@@ -63,7 +63,7 @@ def segment_weeds(
     return weed_mask
 
 
-def _row_distance_map(veg_mask: np.ndarray, rows: np.ndarray):
+def _row_distance_map(veg_mask: np.ndarray, rows: np.ndarray) -> np.ndarray:
     """Compute distances between vegetation pixels and crop row lines.
 
     Parameters
@@ -137,7 +137,7 @@ def _row_distance_map(veg_mask: np.ndarray, rows: np.ndarray):
 def classification_model(
     pixels_crop: np.ndarray,
     pixels_weed: np.ndarray
-):
+) -> DecisionTreeClassifier:
     """Build a pixel classification model based on decision tree.
 
     Crop pixels are labeled as `0`, while weed pixels are labeled as `1`.
@@ -176,7 +176,7 @@ def fake_weeds(
     patch_density: float = 0.2,
     patch_size: Tuple[int, int] = (100, 100),
     resolution: float = 20
-):
+) -> Tuple[np.ndarray, np.ndarray]:
     """Add weed patches to a crop field image.
 
     Parameters

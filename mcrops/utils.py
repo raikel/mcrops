@@ -9,7 +9,7 @@ def draw_rows(
     rows: np.ndarray,
     line_color: Tuple[int, int, int] = (255, 0, 0),
     line_width: int = 2
-):
+) -> np.ndarray:
     """Draw crop rows lines in a crop field image.
 
     Parameters
@@ -46,7 +46,7 @@ def draw_rows(
     return image
 
 
-def poly_mask(poly: np.ndarray, shape: tuple):
+def poly_mask(poly: np.ndarray, shape: tuple) -> np.ndarray:
     roi_mask = np.zeros(shape, dtype=np.uint8)
     cv.fillConvexPoly(roi_mask, poly, 255)
     return roi_mask
@@ -56,7 +56,7 @@ def array_image(
     values: np.ndarray,
     colormap: int = None,
     full_scale: bool = True
-):
+) -> np.ndarray:
     if values.dtype != np.uint8 or full_scale:
         value_max = float(np.max(values))
         value_min = float(np.min(values))
@@ -81,7 +81,7 @@ def rotate_image(
     interp: int = cv.INTER_NEAREST,
     border_mode: int = cv.BORDER_TRANSPARENT,
     border_value: int = 0
-):
+) -> Tuple[np.ndarray, np.ndarray]:
     (h, w) = image.shape[0:2]
     matrix = transform_matrix(angle)
     corners = np.array([[0, 0, 1], [w, 0, 1], [w, h, 1], [0, h, 1]])
@@ -99,13 +99,13 @@ def rotate_image(
     return image, matrix
 
 
-def trim_image(img, box):
+def trim_image(image: np.ndarray, box: np.ndarray) -> np.ndarray:
     x1, y1, w, h = box
     x2, y2 = x1 + w, y1 + h
-    return img[y1:y2, x1:x2]
+    return image[y1:y2, x1:x2]
 
 
-def trim_poly(poly, box):
+def trim_poly(poly: [list, np.ndarray], box: [list, tuple]) -> np.ndarray:
     x1, y1, w, h = box
     x2, y2 = x1 + w, y1 + h
     return np.minimum(np.maximum(poly, [x1, y1]), [x2, y2])
@@ -116,7 +116,7 @@ def transform_matrix(
     angle: float = 0,
     translate: tuple = (0, 0),
     scale: tuple = (1.0, 1.0)
-):
+) -> np.ndarray:
     s, c = np.sin(angle), np.cos(angle)
     sx, sy = scale[0], scale[1]
     dx, dy = translate[0], translate[1]

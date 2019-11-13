@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+from typing import Tuple
+
 import cv2 as cv
 import numpy as np
 
 from .utils import trim_poly, rotate_image, trim_image, transform_matrix
 
 
-def segment_vegetation(image: np.ndarray, threshold: float = 1):
+def segment_vegetation(image: np.ndarray, threshold: float = 1) -> np.ndarray:
     """Segment vegetation pixels of a crop field image.
 
     Parameters
@@ -38,7 +40,7 @@ def norm_image(
     roi_trim: bool = True,
     rows_direction: float = 0,
     is_mask: bool = False
-):
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Normalize a crop field image.
 
     A crop field image is normalized by rotating it by and angle equal in
@@ -113,7 +115,7 @@ def mask_density(
     roi_mask: np.ndarray = None,
     cell_size: tuple = (5, 5),
     resolution: float = 20
-):
+) -> np.ndarray:
     """Compute a density map from a mask image.
 
     Parameters
@@ -181,7 +183,7 @@ def detect_roi(
     resolution: float = 20,
     min_ratio: float = 0.1,
     max_ratio: float = 0.9
-):
+) -> np.ndarray:
     """Detect the region-of-interest in the vegetation mask of a crop field.
 
     Parameters

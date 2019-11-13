@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to mcrops’s documentation! &#8212; mcrops 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-mcrops-s-documentation">
+<h1>Welcome to mcrops’s documentation!<a class="headerlink" href="#welcome-to-mcrops-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-mcrops.veget"></span><dl class="function">
+<dt id="mcrops.veget.detect_roi">
+<code class="sig-prename descclassname">mcrops.veget.</code><code class="sig-name descname">detect_roi</code><span class="sig-paren">(</span><em class="sig-param">veg_mask</em>, <em class="sig-param">row_sep: float = 0.7</em>, <em class="sig-param">resolution: float = 20</em>, <em class="sig-param">min_ratio: float = 0.1</em>, <em class="sig-param">max_ratio: float = 0.9</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.veget.detect_roi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect the region-of-interest in the vegetation mask of a crop field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>veg_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Vegetation mask image, where non zero and zero elements represents
+vegetation and background pixels, respectively.</p></li>
+<li><p><strong>row_sep</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.7</em><em>)</em>) – Rough estimated of the mean crop row separation.</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=20</em><em>)</em>) – Resolution in pixels/meter of the input mask image.</p></li>
+<li><p><strong>min_ratio</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.1</em><em>)</em>) – If the ratio between the area of the detected ROI and the full image
+area if higher than <cite>min_ratio</cite> or lower <cite>max_ratio</cite>, the detected ROI
+is discarded and it is assumed as the whole image.</p></li>
+<li><p><strong>max_ratio</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.1</em><em>)</em>) – If the ratio between the area of the detected ROI and the full image
+area if higher than <cite>min_ratio</cite> or lower <cite>max_ratio</cite>, the detected ROI
+is discarded and it is assumed as the whole image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>roi_poly</strong> – Convex polygon that encloses the detected ROI, in the format
+returned by <code class="docutils literal notranslate"><span class="pre">help(cv2.contourArea)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape = [r, 1, 2] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="mcrops.veget.mask_density">
+<code class="sig-prename descclassname">mcrops.veget.</code><code class="sig-name descname">mask_density</code><span class="sig-paren">(</span><em class="sig-param">mask: numpy.ndarray</em>, <em class="sig-param">roi_mask: numpy.ndarray = None</em>, <em class="sig-param">cell_size: tuple = (5</em>, <em class="sig-param">5)</em>, <em class="sig-param">resolution: float = 20</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.veget.mask_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a density map from a mask image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Mask image formed by non zero and zero elements.</p></li>
+<li><p><strong>roi_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Region-of-interest mask image.</p></li>
+<li><p><strong>cell_size</strong> (<em>tuple</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=</em><em>(</em><em>10</em><em>, </em><em>10</em><em>)</em><em>)</em>) – Size (width x height) in meters of each rectangular cell of the
+density map grid.</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=20</em><em>)</em>) – Resolution in pixels/meter of the input mask image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>density_map</strong> – An array of the same shape as the input <cite>image</cite>, representing the
+density map. To compute the density map, the input image is divided by
+an uniform grid with cell size <cite>cell_size</cite>. Then, inside each cell, the
+density is computed as the ratio between the number non zero pixels
+that belongs to <cite>mask</cite> and the number of non zero pixels from
+<cite>roi_mask</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.float32</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="mcrops.veget.norm_image">
+<code class="sig-prename descclassname">mcrops.veget.</code><code class="sig-name descname">norm_image</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em>, <em class="sig-param">roi_poly: numpy.ndarray = None</em>, <em class="sig-param">roi_trim: bool = True</em>, <em class="sig-param">rows_direction: float = 0</em>, <em class="sig-param">is_mask: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.veget.norm_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize a crop field image.</p>
+<p>A crop field image is normalized by rotating it by and angle equal in
+magnitude to the crop rows direction, but in opposite direction, such that
+in the normalized image the crop rows are horizontally oriented. Optionally,
+the image can be cropped to an specified region-of-interest (ROI).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (array-like of shape = [m, n, 3] or [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Crop field image. Can be a multi-channel or single-channel image.</p></li>
+<li><p><strong>roi_poly</strong> (array-like of shape = [r, 1, 2] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code>) – Convex polygon that encloses the ROI of the input image, in the format
+returned by <code class="docutils literal notranslate"><span class="pre">help(cv2.contourArea)</span></code>.</p></li>
+<li><p><strong>roi_trim</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=True</em><em>)</em>) – Whether to trim the image to the roi area.</p></li>
+<li><p><strong>rows_direction</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.0</em><em>)</em>) – The crop rows mean direction, clock wise, in radians.</p></li>
+<li><p><strong>is_mask</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=False</em><em>)</em>) – Whether <cite>image</cite> is a binary mask image. This controls the interpolation
+method used internally to transform images. For binary mask images, the
+method used is <cite>cv.INTER_NEAREST</cite>, otherwise the method used is
+<cite>cv.INTER_LINEAR</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>image</strong> (array-like of shape = [m, n, 3] or [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code>) – An array of the same shape as the input <cite>image</cite>, representing the
+normalized image.</p></li>
+<li><p><strong>roi_poly</strong> (array-like of shape = [r, 1, 2] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code>) – The modified input <cite>roi_poly</cite>, after normalization</p></li>
+<li><p><strong>t_matrix</strong> (array-like of shape = [3, 3] and <code class="docutils literal notranslate"><span class="pre">dtype=np.float</span></code>) – The transformation matrix that make the normalization.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="mcrops.veget.segment_vegetation">
+<code class="sig-prename descclassname">mcrops.veget.</code><code class="sig-name descname">segment_vegetation</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em>, <em class="sig-param">threshold: float = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.veget.segment_vegetation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segment vegetation pixels of a crop field image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (array-like of shape = [m, n, 3] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – The crop field image to be segmented.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=1</em><em>)</em>) – Threshold segmentation value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mask</strong> – A mask image where non zero and zero elements represents
+vegetation and background pixels in the input image, respectively.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-mcrops.rows"></span><dl class="function">
+<dt id="mcrops.rows.detect_direction">
+<code class="sig-prename descclassname">mcrops.rows.</code><code class="sig-name descname">detect_direction</code><span class="sig-paren">(</span><em class="sig-param">veg_mask: numpy.ndarray</em>, <em class="sig-param">window_shape: Tuple[float</em>, <em class="sig-param">float] = (10</em>, <em class="sig-param">10)</em>, <em class="sig-param">n_steps: int = 360</em>, <em class="sig-param">resolution: float = 20</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.rows.detect_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect the crop rows direction in a vegetation mask of a crop field.</p>
+<p>The algorithm works as follows. A window is placed in the center of the
+vegetation mask image. This window is rotated in clock wise direction by
+uniformly spaced angles in the interval <cite>[0, pi]</cite>. Inside each window,
+a vegetation profile is computed. A vegetation profile is array where each
+element represents the number of non zero pixels along the corresponding
+column of pixels inside the region of the vegetation mask selected by the
+rotated window. For each vegetation profile, the peak-to-peak variation is
+computed and associated to the rotation angle of the corresponding window.
+The rotated window with the highest peak-to-peak vegetation profile is
+assumed to be perpendicular to the crop rows direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>veg_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Vegetation mask image, where non zero and zero elements represents
+vegetation and background pixels, respectively.</p></li>
+<li><p><strong>window_shape</strong> (<em>tuple</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=</em><em>(</em><em>200</em><em>, </em><em>200</em><em>)</em><em>)</em>) – The shape of the window inside which vegetation profiles are computed.</p></li>
+<li><p><strong>n_steps</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=360</em><em>)</em>) – Number of sample angles to rotate the profile window.</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=20</em><em>)</em>) – Resolution in pixels/meter of the input mask image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>direction</strong> – The detected mean crop rows direction.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="mcrops.rows.detect_rows">
+<code class="sig-prename descclassname">mcrops.rows.</code><code class="sig-name descname">detect_rows</code><span class="sig-paren">(</span><em class="sig-param">veg_mask: numpy.ndarray</em>, <em class="sig-param">roi_mask: numpy.ndarray = None</em>, <em class="sig-param">row_sep: float = 0.7</em>, <em class="sig-param">extent_max: float = 5</em>, <em class="sig-param">extent_thr: float = 0.5</em>, <em class="sig-param">fusion_thr: float = 0.4</em>, <em class="sig-param">link_thr: int = 3</em>, <em class="sig-param">resolution: float = 20</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.rows.detect_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect the crop rows in a vegetation mask of a crop field.</p>
+<p>The algorithm works as follows. A window is placed in the center of the
+vegetation mask image. This window is rotated in clock wise direction by
+uniformly spaced angles in the interval <cite>[0, pi]</cite>. Inside each window,
+a vegetation profile is computed. A vegetation profile is array where each
+element represents the number of non zero pixels along the corresponding
+column of pixels inside the region of the vegetation mask selected by the
+rotated window. For each vegetation profile, the peak-to-peak variation is
+computed and associated to the rotation angle of the corresponding window.
+The rotated window with the highest peak-to-peak vegetation profile is
+assumed to be perpendicular to the crop rows direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>veg_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Vegetation mask image, where non zero and zero elements represents
+vegetation and background pixels, respectively.</p></li>
+<li><p><strong>roi_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Region-of-interest mask image.</p></li>
+<li><p><strong>row_sep</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.7</em><em>)</em>) – Rough estimated of the mean crop row separation.</p></li>
+<li><p><strong>extent_max</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=5</em><em>)</em>) – The maximum length, in meters, of each line of pixels added to eval an
+element of a normalized vegetation profile.</p></li>
+<li><p><strong>extent_thr</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.5</em><em>)</em>) – The minimum length, in meters, of each line of pixels added to eval an
+element of a normalized vegetation profile.</p></li>
+<li><p><strong>fusion_thr</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.4</em><em>)</em>) – The maximum standard deviation of the row indices of a set of anchor
+points for these points to be fused into a single crop row line.</p></li>
+<li><p><strong>link_thr</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=3</em><em>)</em>) – The minimum number of anchor points required to be fused in a single
+crop row line.</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=20</em><em>)</em>) – Resolution in pixels/meter of the input mask image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>rows_ridges</strong> (array-like of shape = [r, c, 2] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code>) – Detected crop rows lines, ridged aligned, where each element is crop
+row line represented by an array of <cite>c</cite> pairs of indexes in the form
+<cite>(row, column)</cite>. Each crop row line is a continuous polygonal line.</p></li>
+<li><p><strong>rows_furrows</strong> (array-like of shape = [r, c, 2] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code>) – Detected crop rows lines, furrow aligned, where each element is crop
+row line represented by an array of <cite>c</cite> pairs of indexes in the form
+<cite>(row, column)</cite>. Each crop row line is a continuous polygonal line.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-mcrops.weeds"></span><dl class="function">
+<dt id="mcrops.weeds.classification_model">
+<code class="sig-prename descclassname">mcrops.weeds.</code><code class="sig-name descname">classification_model</code><span class="sig-paren">(</span><em class="sig-param">pixels_crop: numpy.ndarray</em>, <em class="sig-param">pixels_weed: numpy.ndarray</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.weeds.classification_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a pixel classification model based on decision tree.</p>
+<p>Crop pixels are labeled as <cite>0</cite>, while weed pixels are labeled as <cite>1</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pixels_crop</strong> (array-like of shape = [p, 3] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Crop pixels data set, where each element represents a pixel of crop
+image regions.</p></li>
+<li><p><strong>pixels_weed</strong> (array-like of shape = [q, 3] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Weeds pixels data set, where each element represents a pixel of weed
+image regions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>model</strong> – The DecisionTreeClassifier object. Please refer to
+<code class="docutils literal notranslate"><span class="pre">help(sklearn.tree.DecisionTreeClassifier)</span></code> for attributes of
+DecisionTreeClassifier object and basic usage of these attributes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DecisionTreeClassifier object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="mcrops.weeds.fake_weeds">
+<code class="sig-prename descclassname">mcrops.weeds.</code><code class="sig-name descname">fake_weeds</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray, veg_mask: numpy.ndarray, weed_images: List[numpy.ndarray], n_patches: int = 100, patch_density: float = 0.2, patch_size: Tuple[int, int] = (100, 100), resolution: float = 20</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.weeds.fake_weeds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add weed patches to a crop field image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (array-like of shape = [m, n, 3] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – The crop field image.</p></li>
+<li><p><strong>veg_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Vegetation mask image, where non zero and zero elements represents
+vegetation and background pixels, respectively.</p></li>
+<li><p><strong>weed_images</strong> (list of array-like of shape = [m, n, 4] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – List of the four-channel weed image samples.</p></li>
+<li><p><strong>n_patches</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=100</em><em>)</em>) – Number of weed patches to add.</p></li>
+<li><p><strong>patch_density</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=0.2</em><em>)</em>) – Weed density inside each added weed patch.</p></li>
+<li><p><strong>patch_size</strong> (<em>tuple of ints with length = 2</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=</em><em>(</em><em>2</em><em>, </em><em>2</em><em>)</em><em>)</em>) – Mean size (width x height) in meters of the weed patches</p></li>
+<li><p><strong>resolution</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=20</em><em>)</em>) – Resolution in pixels/meter of the input mask image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>image_weeded</strong> (array-like of shape = [m, n, 3] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Crop field image with added weed patches.</p></li>
+<li><p><strong>weed_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Weed mask image, where non zero and zero elements represents weed and
+background pixels, respectively.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="mcrops.weeds.segment_weeds">
+<code class="sig-prename descclassname">mcrops.weeds.</code><code class="sig-name descname">segment_weeds</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em>, <em class="sig-param">veg_mask: numpy.ndarray</em>, <em class="sig-param">crop_rows: numpy.ndarray</em>, <em class="sig-param">model: sklearn.tree.tree.DecisionTreeClassifier = None</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.weeds.segment_weeds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segment weed pixels of a crop field image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (array-like of shape = [m, n, 3] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – The crop field image to be segmented.</p></li>
+<li><p><strong>veg_mask</strong> (array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Vegetation mask image, where non zero and zero elements represents
+vegetation and background pixels, respectively.</p></li>
+<li><p><strong>crop_rows</strong> (array-like of shape = [r, c, 2] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code>) – Crop rows lines, where each element is crop row line represented by an
+array of <cite>c</cite> pairs of indexes in the form <cite>(row, column)</cite>. Each crop
+row line is a continuous polygonal line.</p></li>
+<li><p><strong>model</strong> (<em>sklearn.tree.DecisionTreeClassifier</em><em> or </em><em>None</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Decision tree-based model to classify vegetation pixels into “crop” and
+“weed” classes. Crop and weed pixels must be labeled as <cite>0</cite> and <cite>1</cite>,
+respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>weed_mask</strong> – Weed mask image, where non zero and zero elements represents weed and
+background pixels, respectively.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape = [m, n] and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">detect_rows()</span></code>, <a class="reference internal" href="#mcrops.weeds.classification_model" title="mcrops.weeds.classification_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">classification_model()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">segment_vegetation()</span></code></p>
+</div>
+</dd></dl>
+
+<span class="target" id="module-mcrops.utils"></span><dl class="function">
+<dt id="mcrops.utils.draw_rows">
+<code class="sig-prename descclassname">mcrops.utils.</code><code class="sig-name descname">draw_rows</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em>, <em class="sig-param">rows: numpy.ndarray</em>, <em class="sig-param">line_color: Tuple[int</em>, <em class="sig-param">int</em>, <em class="sig-param">int] = (255</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">line_width: int = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#mcrops.utils.draw_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw crop rows lines in a crop field image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (array-like of shape = {[m, n, 3], [m, n]} and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code>) – Color or grayscale crop field image.</p></li>
+<li><p><strong>rows</strong> (array-like of shape = [r, c, 2] and <code class="docutils literal notranslate"><span class="pre">dtype=np.int32</span></code>) – Crop rows lines, where each element is crop row line represented by an
+array of <cite>c</cite> pairs of indexes in the form <cite>(row, column)</cite>. Each crop
+row line is a continuous polygonal line.</p></li>
+<li><p><strong>line_color</strong> (<em>tuple of ints with length = 3</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=</em><em>(</em><em>255</em><em>, </em><em>0</em><em>, </em><em>0</em><em>)</em><em>)</em>) – Color of drawn lines, in BGR format.</p></li>
+<li><p><strong>line_width</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>(</em><em>default=2</em><em>)</em>) – Width of drawn lines.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>image</strong> – Image with drawn crop rows lines. Input <cite>image</cite> is not modified, drawing
+is done in a copy of it.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape = {[m, n, 3], [m, n]} and <code class="docutils literal notranslate"><span class="pre">dtype=np.uint8</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">mcrops</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Raikel Bordon.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

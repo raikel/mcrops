@@ -14,7 +14,7 @@ def detect_direction(
     window_shape: Tuple[float, float] = (10, 10),
     n_steps: int = 360,
     resolution: float = 20
-):
+) -> float:
     """Detect the crop rows direction in a vegetation mask of a crop field.
 
     The algorithm works as follows. A window is placed in the center of the
@@ -125,7 +125,7 @@ def detect_rows(
     fusion_thr: float = 0.4,
     link_thr: int = 3,
     resolution: float = 20
-):
+) -> Tuple[np.ndarray, np.ndarray]:
     """Detect the crop rows in a vegetation mask of a crop field.
 
     The algorithm works as follows. A window is placed in the center of the
@@ -179,7 +179,7 @@ def detect_rows(
     extent_thr = int(extent_thr * resolution)
     fusion_thr *= resolution
     max_deviation = int(0.5 * row_sep * resolution)
-    filter_size = int(row_sep * resolution)
+    filter_size = int(0.5 * row_sep * resolution)
     peaks_mpd = int(0.5 * row_sep * resolution)
 
     (height, width) = veg_mask.shape
@@ -260,7 +260,7 @@ def _find_profile_peaks(
         mpd: int = 50,
         mph: float = 0.2,
         rpl: float = 0.95
-):
+) -> np.ndarray:
     mph = mph * profile.max()
     if filter_size > 0:
         profile = convolve(profile / filter_size, np.ones(filter_size), 'same')
@@ -314,7 +314,7 @@ def _detect_peaks(
         threshold: float = 0,
         edge: str = 'rising',
         kpsh: bool = False
-):
+) -> np.ndarray:
     """Detect peaks in data based on their amplitude and other features.
 
     Parameters

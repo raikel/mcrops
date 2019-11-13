@@ -27,7 +27,7 @@ from the source directory.
 Example usages
 ============
 
-Here is some example usages of `mcrops`.
+Here is a basic example usages of `mcrops`.
 
 .. code-block:: python
 
@@ -79,7 +79,7 @@ Here is some example usages of `mcrops`.
     )
     cv.arrowedLine(image_draw, pt1, pt2, color=(0, 255, 0), thickness=8)
 
-    # Normalize the crop field image and the vegetation mask (trim then to ROI
+    # Normalize the crop field image and the vegetation mask (trim them to ROI
     # area and rotate them such that crop rows are horizontal)
     image_rows, roi_poly_norm, _ = veget.norm_image(
         image=image,

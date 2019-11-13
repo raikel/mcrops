@@ -65,7 +65,7 @@ def main(image_path: str, resolution: float, row_sep: float):
     print(f'Mean row direction is f{math.degrees(direction):.2f} degrees')
 
     print('Normalizing image')
-    # Normalize the crop field image and the vegetation mask (trim then to ROI
+    # Normalize the crop field image and the vegetation mask (trim them to ROI
     # area and rotate them such that crop rows are horizontal)
     image_rows, roi_poly_norm, _ = veget.norm_image(
         image=image,
@@ -109,7 +109,7 @@ def main(image_path: str, resolution: float, row_sep: float):
     image_rows = utils.draw_rows(
         image_rows,
         row_ridges,
-        line_width=8,
+        line_width=4,
         line_color=(0, 255, 0)
     )
 
@@ -133,21 +133,21 @@ if __name__ == '__main__':
         '--input',
         type=str,
         required=False,
-        default=path.join(curr_dir, 'data/crop_field_sparse_res40.png'),
+        default=path.join(curr_dir, 'data/crop_field_dense_res30.png'),
         help='Path to crop field image.'
     )
     parser.add_argument(
         '--res',
         type=float,
         required=False,
-        default=40,
+        default=30,
         help='Image resolution in pixels/meter.'
     )
     parser.add_argument(
         '--row_sep',
         type=float,
         required=False,
-        default=0.7,
+        default=0.8,
         help='Approximated mean crop rows separation in meters.'
     )
     args = parser.parse_args(sys.argv[1:])
